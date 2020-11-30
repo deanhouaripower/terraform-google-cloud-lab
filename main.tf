@@ -7,20 +7,16 @@ metadata_startup_script = var.linuxtype == "ubuntu" ? var.debian-script : var.ce
 
 disk {
 source_image = var.linuxtype == "ubuntu" ? var.gcp-image[0] : var.gcp-image[1]
-}
+ }
 
 network_interface {
 network = google_compute_network.webnetwork.name
 subnetwork = google_compute_subnetwork.websubnet.name
 access_config {
-}
-}
+      }
+   }
 
 }
-
-
-
-
 
 resource "google_compute_firewall" "gcpfw" {
 name = "gcp-fw"
@@ -31,7 +27,7 @@ target_tags = google_compute_instance_template.gcptemplate.tags
 allow {
 protocol = "tcp"
 ports = ["80","22"]
-}
+  }
 }
 
 resource "google_compute_instance_group_manager" "mig1" {
@@ -42,7 +38,7 @@ target_size = 2
 
 version {
 instance_template = google_compute_instance_template.gcptemplate.id
-}
+  }
 }
 
 resource "google_compute_autoscaler" "gcpscale" {
@@ -52,7 +48,7 @@ target = google_compute_instance_group_manager.mig1.id
 autoscaling_policy {
 max_replicas = 4
 min_replicas = 2
-}
+  }
 }
 
 //gcp load balancer
